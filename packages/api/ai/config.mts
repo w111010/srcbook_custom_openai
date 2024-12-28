@@ -21,6 +21,7 @@ export async function getModel(): Promise<LanguageModel> {
       const openai = createOpenAI({
         compatibility: 'strict', // strict mode, enabled when using the OpenAI API
         apiKey: config.openaiKey,
+        baseURL: config.aiBaseUrl || undefined,
       });
       return openai(model);
 

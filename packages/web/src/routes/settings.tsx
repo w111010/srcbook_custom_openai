@@ -264,7 +264,9 @@ export function AiSettings({ saveButtonLabel }: AiSettingsProps) {
   const openaiKeySaveEnabled =
     (typeof configOpenaiKey === 'string' && openaiKey !== configOpenaiKey) ||
     ((configOpenaiKey === null || configOpenaiKey === undefined) && openaiKey.length > 0) ||
-    model !== aiModel;
+    model !== aiModel ||
+    (typeof aiBaseUrl === 'string' && baseUrl !== aiBaseUrl) ||
+    ((aiBaseUrl === null || aiBaseUrl === undefined) && baseUrl.length > 0);
 
   const anthropicKeySaveEnabled =
     (typeof configAnthropicKey === 'string' && anthropicKey !== configAnthropicKey) ||
@@ -315,21 +317,31 @@ export function AiSettings({ saveButtonLabel }: AiSettingsProps) {
       </div>
 
       {aiProvider === 'openai' && (
-        <div className="flex gap-2">
-          <Input
-            name="openaiKey"
-            placeholder="openAI API key"
-            type="password"
-            value={openaiKey}
-            onChange={(e) => setOpenaiKey(e.target.value)}
-          />
-          <Button
-            className="px-5"
-            onClick={() => updateConfigContext({ openaiKey, aiModel: model })}
-            disabled={!openaiKeySaveEnabled}
-          >
-            {saveButtonLabel ?? 'Save'}
-          </Button>
+        <div className="flex flex-col gap-2">
+          <div className="flex gap-2">
+            <Input
+              name="openaiKey"
+              placeholder="openAI API key"
+              type="password"
+              value={openaiKey}
+              onChange={(e) => setOpenaiKey(e.target.value)}
+            />
+            <Button
+              className="px-5"
+              onClick={() => updateConfigContext({ openaiKey, aiBaseUrl: baseUrl, aiModel: model })}
+              disabled={!openaiKeySaveEnabled}
+            >
+              {saveButtonLabel ?? 'Save'}
+            </Button>
+          </div>
+          <div className="flex gap-2">
+            <Input
+              name="openaiBaseUrl"
+              placeholder="OpenAI API Base URL (optional)"
+              value={baseUrl}
+              onChange={(e) => setBaseUrl(e.target.value)}
+            />
+          </div>
         </div>
       )}
 
